@@ -13,8 +13,9 @@ class PelangganApiController extends Controller
     {
         return response()->json([
             'success' => true,
+            'message' => 'Data pelanggan berhasil ditampilkan',
             'data' => Pelanggan::all()
-        ]);
+        ], 200);
     }
 
     // Menambahkan data pelanggan
@@ -23,7 +24,7 @@ class PelangganApiController extends Controller
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'alamat' => 'required|string',
-            'no_hp' => 'required|string|max:20',
+            'no_hp' => 'required|string|max:20'
         ]);
 
         $pelanggan = Pelanggan::create($validated);
@@ -35,8 +36,8 @@ class PelangganApiController extends Controller
         ], 201);
     }
 
-    // Menampilkan satu data pelanggan
-    public function show($id)
+    // Menampilkan pelanggan berdasarkan ID
+    public function show(string $id)
     {
         $pelanggan = Pelanggan::find($id);
 
@@ -49,12 +50,13 @@ class PelangganApiController extends Controller
 
         return response()->json([
             'success' => true,
+            'message' => 'Data pelanggan berhasil ditemukan',
             'data' => $pelanggan
-        ]);
+        ], 200);
     }
 
-    // Mengubah data pelanggan
-    public function update(Request $request, $id)
+    // Memperbarui data pelanggan
+    public function update(Request $request, string $id)
     {
         $pelanggan = Pelanggan::find($id);
 
@@ -68,7 +70,7 @@ class PelangganApiController extends Controller
         $validated = $request->validate([
             'nama' => 'sometimes|required|string|max:255',
             'alamat' => 'sometimes|required|string',
-            'no_hp' => 'sometimes|required|string|max:20',
+            'no_hp' => 'sometimes|required|string|max:20'
         ]);
 
         $pelanggan->update($validated);
@@ -76,12 +78,12 @@ class PelangganApiController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data pelanggan berhasil diperbarui',
-            'data' => $pelanggan
-        ]);
+            'data' => $pelanggan->fresh()
+        ], 200);
     }
 
     // Menghapus data pelanggan
-    public function destroy($id)
+    public function destroy(string $id)
     {
         $pelanggan = Pelanggan::find($id);
 
@@ -97,6 +99,6 @@ class PelangganApiController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data pelanggan berhasil dihapus'
-        ]);
+        ], 200);
     }
 }
